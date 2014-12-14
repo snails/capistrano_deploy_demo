@@ -58,7 +58,7 @@ namespace :deploy do
 
   task :migrate_database do
     on roles(:web) do
-      run "cd #{deploy_to}/current/config/; mv database.example.yml database.yml"
+      run "cd #{deploy_to}/current/config/; mv database.example.yml #{deploy_to}/current/config/database.yml"
       run "cd #{deploy_to}/current/; RAILS_ENV=production bundle exec rake db:migrate"
     end
   end 
