@@ -12,7 +12,7 @@ set :user, 'huyang'
 set :use_sudo, false
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/var/www/demo"
+set :deploy_to, "/www/demo"
 
 # Default value for :scm is :git
 set :scm, :git
@@ -27,7 +27,7 @@ set :log_level, :debug
 set :pty, true
 
 # Default value for :linked_files is []
-# set :linked_files, fetch(:linked_files, []).push('config/database.yml')
+set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
 
 # Default value for linked_dirs is []
 #set :linked_dirs, fetch(:linked_dirs, []).push('bin', 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
@@ -58,16 +58,15 @@ namespace :deploy do
 
   task :migrate_database do
     on roles(:web) do
-      run "cd #{deploy_to}/current/config/; mv database.example.yml #{deploy_to}/current/config/database.yml"
       run "cd #{deploy_to}/current/; RAILS_ENV=production bundle exec rake db:migrate"
     end
   end 
 
-  task :compile_assets do
-    on roles(:web) do
-      run "cd #{deploy_to}/current/; RAILS_ENV=production bundle exec rake assets:precompile"
-    end
-  end
+  # task :compile_assets do
+    # on roles(:web) do
+      # run "cd #{deploy_to}/current/; RAILS_ENV=production bundle exec rake assets:precompile"
+    # end
+  # end
 
 
   after :restart, :clear_cache do
